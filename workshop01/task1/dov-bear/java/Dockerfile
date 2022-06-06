@@ -1,9 +1,7 @@
 ### Building the image
 ARG VER=3.8-openjdk-17
 
-FROM maven:${VER}
-
-LABEL developer=gabriel
+FROM maven:${VER} AS builder
 
 # create a working directory
 # mkdir /app && cd /app
@@ -19,7 +17,15 @@ ADD mvnw.cmd .
 ADD pom.xml .
 
 # install the packages
-# RUN mvn dependency:resolve
+RUN mvn package
+
+FROM openjdk:17.0.2
+
+LABEL org.opencontainers.image.source=https://github.com/Gabrieltay/nodeJsRepo
+
+WORKDIR /app
+
+COPY --from=builder /app/target/dovbear-*.jar app.jar
 
 ### Running the image
 ENV APP_PORT=3000
@@ -30,5 +36,5 @@ HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
     CMD curl -s http://localhost:${APP_PORT}/healthz > /dev/null || exit 1
 
 # run the application
-ENTRYPOINT [ "mvn", "spring-boot:run" ]
+ENTRYPOINT [ "java", "-jar", "app.jar"  ]
 
