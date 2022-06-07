@@ -1,0 +1,9 @@
+---
+# apiVersion: core/v1 (same)
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: myns
+  labels:
+    app: nw
+    foo: bar
