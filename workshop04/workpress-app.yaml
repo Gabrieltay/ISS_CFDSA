@@ -1,0 +1,108 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: wpapp-cm
+  labels:
+    name: wpapp-cm
+data:
+  WORDPRESS_DB_HOST: mysql
+  WORDPRESS_DB_USER: root
+  WORDPRESS_DB_NAME: wpdb
+  WORDPRESS_TABLE_PREFIX: wp_
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: wpapp-secret
+  labels:
+    name: wpapp-secret
+type: Opaque
+data:
+  WORDPRESS_DB_PASSWORD: Y2hhbmdlaXQ=
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: wpapp-vol
+  labels: 
+    name: wpapp-vol
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: do-block-storage
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wpapp-deploy
+  labels:
+    name: wpapp-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: wpapp-po
+  template:
+    metadata:
+      name: wpapp-po
+      labels:
+        name: wpapp-po
+        allow-ingress-traffic: "yes"
+        allow-access: "yes"
+    spec:
+      volumes:
+      - name: wpapp-pvc-vol
+        persistentVolumeClaim:
+          claimName: wpapp-vol
+      containers:
+      - name: wpapp-container
+        image: wordpress:latest
+        imagePullPolicy: IfNotPresent
+        envFrom:
+          - configMapRef:
+              name: wpapp-cm
+          - secretRef: 
+              name: wpapp-secret
+        volumeMounts:
+          - name: wpapp-pvc-vol
+            mountPath: /var/www/html
+        ports:
+        - name: wpapp-port
+          containerPort: 80
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: wpapp-svc
+  labels: 
+    name: wpapp-svc
+spec:
+  type: ClusterIP
+  selector: 
+    name: wpapp-po
+  ports:
+    - port: 8080
+      targetPort: wpapp-port
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: wpapp-ing
+  labels: 
+    name: wpapping
+spec:
+  ingressClassName: nginx
+  defaultBackend:
+    service: 
+      name: wpapp-svc
+      port:
+        number: 8080

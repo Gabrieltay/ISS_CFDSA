@@ -1,0 +1,165 @@
+Name:         wpdbcluster-mysql
+Namespace:    wpns
+Labels:       name=wpdbcluster-mysql
+Annotations:  mysql.presslabs.org/version: 300
+API Version:  mysql.presslabs.org/v1alpha1
+Kind:         MysqlCluster
+Metadata:
+  Creation Timestamp:  2022-06-09T05:48:20Z
+  Finalizers:
+    mysql.presslabs.org/registered-in-orchestrator
+  Generation:  2
+  Managed Fields:
+    API Version:  mysql.presslabs.org/v1alpha1
+    Fields Type:  FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:annotations:
+          .:
+          f:kubectl.kubernetes.io/last-applied-configuration:
+        f:labels:
+          .:
+          f:name:
+      f:spec:
+        .:
+        f:replicas:
+        f:secretName:
+        f:volumeSpec:
+          .:
+          f:persistentVolumeClaim:
+            .:
+            f:accessModes:
+            f:resources:
+              .:
+              f:requests:
+                .:
+                f:storage:
+            f:storageClassName:
+    Manager:      kubectl-client-side-apply
+    Operation:    Update
+    Time:         2022-06-09T05:48:20Z
+    API Version:  mysql.presslabs.org/v1alpha1
+    Fields Type:  FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:annotations:
+          f:mysql.presslabs.org/version:
+        f:finalizers:
+          .:
+          v:"mysql.presslabs.org/registered-in-orchestrator":
+      f:spec:
+        f:podSpec:
+          .:
+          f:metricsExporterResources:
+          f:mysqlOperatorSidecarResources:
+          f:resources:
+    Manager:      mysql-operator
+    Operation:    Update
+    Time:         2022-06-09T05:48:22Z
+    API Version:  mysql.presslabs.org/v1alpha1
+    Fields Type:  FieldsV1
+    fieldsV1:
+      f:status:
+        .:
+        f:conditions:
+        f:nodes:
+        f:readyNodes:
+    Manager:         mysql-operator
+    Operation:       Update
+    Subresource:     status
+    Time:            2022-06-09T05:49:42Z
+  Resource Version:  351461
+  UID:               17d47a5f-6ebe-401b-9424-d48963f2598d
+Spec:
+  Pod Spec:
+    Metrics Exporter Resources:
+    Mysql Operator Sidecar Resources:
+    Resources:
+  Replicas:     3
+  Secret Name:  wpdbcluster-secret
+  Volume Spec:
+    Persistent Volume Claim:
+      Access Modes:
+        ReadWriteOnce
+      Resources:
+        Requests:
+          Storage:         1Gi
+      Storage Class Name:  do-block-storage
+Status:
+  Conditions:
+    Last Transition Time:  2022-06-09T05:49:47Z
+    Message:               writable nodes: wpdbcluster-mysql-mysql-0.mysql.wpns
+    Reason:                ClusterReadOnlyFalse
+    Status:                False
+    Type:                  ReadOnly
+    Last Transition Time:  2022-06-09T05:51:42Z
+    Message:               Cluster is ready
+    Reason:                ClusterReady
+    Status:                True
+    Type:                  Ready
+    Last Transition Time:  2022-06-09T05:48:22Z
+    Message:               no pending ack
+    Reason:                NoPendingFailoverAckExists
+    Status:                False
+    Type:                  PendingFailoverAck
+    Last Transition Time:  2022-06-09T05:49:52Z
+    Message:               Master is healthy in orchestrator
+    Reason:                ClusterMasterHealthy
+    Status:                False
+    Type:                  FailoverInProgress
+  Nodes:
+    Conditions:
+      Last Transition Time:  2022-06-09T05:49:42Z
+      Status:                False
+      Type:                  Lagged
+      Last Transition Time:  2022-06-09T05:49:42Z
+      Status:                False
+      Type:                  Replicating
+      Last Transition Time:  2022-06-09T05:49:42Z
+      Status:                True
+      Type:                  Master
+      Last Transition Time:  2022-06-09T05:49:47Z
+      Status:                False
+      Type:                  ReadOnly
+    Name:                    wpdbcluster-mysql-mysql-0.mysql.wpns
+    Conditions:
+      Last Transition Time:  2022-06-09T05:50:12Z
+      Status:                False
+      Type:                  Lagged
+      Last Transition Time:  2022-06-09T05:50:12Z
+      Status:                True
+      Type:                  Replicating
+      Last Transition Time:  2022-06-09T05:50:12Z
+      Status:                False
+      Type:                  Master
+      Last Transition Time:  2022-06-09T05:50:12Z
+      Status:                True
+      Type:                  ReadOnly
+    Name:                    wpdbcluster-mysql-mysql-1.mysql.wpns
+    Conditions:
+      Last Transition Time:  2022-06-09T05:51:12Z
+      Status:                False
+      Type:                  Lagged
+      Last Transition Time:  2022-06-09T05:51:12Z
+      Status:                True
+      Type:                  Replicating
+      Last Transition Time:  2022-06-09T05:51:12Z
+      Status:                False
+      Type:                  Master
+      Last Transition Time:  2022-06-09T05:51:12Z
+      Status:                True
+      Type:                  ReadOnly
+    Name:                    wpdbcluster-mysql-mysql-2.mysql.wpns
+  Ready Nodes:               3
+Events:
+  Type     Reason                             Age                 From                     Message
+  ----     ------                             ----                ----                     -------
+  Normal   ConfigMapSyncSuccessfull           20m                 controller.mysqlcluster  /v1, Kind=ConfigMap wpns/wpdbcluster-mysql-mysql created successfully
+  Normal   OperatedSecretSyncSuccessfull      20m                 controller.mysqlcluster  /v1, Kind=Secret wpns/wpdbcluster-mysql-mysql-operated created successfully
+  Normal   MasterSVCSyncSuccessfull           20m                 controller.mysqlcluster  /v1, Kind=Service wpns/wpdbcluster-mysql-mysql-master created successfully
+  Normal   HealthySVCSyncSuccessfull          20m                 controller.mysqlcluster  /v1, Kind=Service wpns/wpdbcluster-mysql-mysql created successfully
+  Normal   HealthyReplicasSVCSyncSuccessfull  20m                 controller.mysqlcluster  /v1, Kind=Service wpns/wpdbcluster-mysql-mysql-replicas created successfully
+  Normal   StatefulSetSyncSuccessfull         20m                 controller.mysqlcluster  apps/v1, Kind=StatefulSet wpns/wpdbcluster-mysql-mysql created successfully
+  Normal   PDBSyncSuccessfull                 20m                 controller.mysqlcluster  policy/v1beta1, Kind=PodDisruptionBudget wpns/wpdbcluster-mysql-mysql created successfully
+  Warning  StatefulSetSyncFailed              20m                 controller.mysqlcluster  apps/v1, Kind=StatefulSet wpns/wpdbcluster-mysql-mysql failed syncing: Operation cannot be fulfilled on statefulsets.apps "wpdbcluster-mysql-mysql": the object has been modified; please apply your changes to the latest version and try again
+  Normal   StatefulSetSyncSuccessfull         17m (x17 over 20m)  controller.mysqlcluster  apps/v1, Kind=StatefulSet wpns/wpdbcluster-mysql-mysql updated successfully
